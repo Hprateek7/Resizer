@@ -20,7 +20,7 @@ import me.echodev.resizer.util.ImageUtils;
  * An image resizing library for Android, which allows you to scale an image file to a smaller or bigger one while keeping the aspect ratio.
  */
 public class Resizer {
-    private int targetLength, quality;
+    private int targetLength, targetWidth, quality;
     private Bitmap.CompressFormat compressFormat;
     private String outputDirPath, outputFilename;
     private File sourceImage;
@@ -31,6 +31,7 @@ public class Resizer {
      */
     public Resizer(Context context) {
         targetLength = 1080;
+        targetWidth = 1080
         quality = 80;
         compressFormat = Bitmap.CompressFormat.JPEG;
         outputDirPath = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath();
@@ -44,6 +45,16 @@ public class Resizer {
      */
     public Resizer setTargetLength(int targetLength) {
         this.targetLength = (targetLength < 0) ? 0 : targetLength;
+        return this;
+    }
+    
+     /**
+     * Set the target Width of the image. 
+     * @param targetWidth The target image length in pixel. The default value is 1080.
+     * @return This Resizer instance, for chained settings.
+     */
+    public Resizer setTargetWidth(int targetWidth) {
+        this.targetWidth = (targetWidth < 0) ? 0 : targetWidth;
         return this;
     }
 
@@ -146,7 +157,7 @@ public class Resizer {
      * @throws IOException
      */
     public File getResizedFile() throws IOException {
-        return ImageUtils.getScaledImage(targetLength, quality, compressFormat, outputDirPath, outputFilename,
+        return ImageUtils.getScaledImage(targetLength, targetWidth, quality, compressFormat, outputDirPath, outputFilename,
                 sourceImage);
     }
 
@@ -156,7 +167,7 @@ public class Resizer {
      * @throws IOException
      */
     public Bitmap getResizedBitmap() throws IOException {
-        return ImageUtils.getScaledBitmap(targetLength, sourceImage);
+        return ImageUtils.getScaledBitmap(targetLength, targetWidth, sourceImage);
     }
 
     /**
